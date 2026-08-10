@@ -1,0 +1,25 @@
+#!/bin/bash
+# brightness-ctl - CLI brightness control in percent
+# Usage: brightness-ctl <set|up|down> <percent>
+
+BACKLIGHT="/sys/class/backlight/intel_backlight"
+BIN="/usr/bin/brightnessctl"
+
+case "$1" in
+    set)
+        "$BIN" -d intel_backlight set "$2%" 2>/dev/null || "$BIN" set "$2%"
+        ;;
+    up)
+        "$BIN" -d intel_backlight set "+$2%" 2>/dev/null || "$BIN" set "+$2%"
+        ;;
+    down)
+        "$BIN" -d intel_backlight set "$2%-" 2>/dev/null || "$BIN" set "$2%-"
+        ;;
+    get)
+        "$BIN" g
+        ;;
+    *)
+        echo "Usage: $0 {set|up|down} <percent>"
+        echo "       $0 get"
+        exit 1
+esac
