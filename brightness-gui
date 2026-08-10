@@ -1,0 +1,2 @@
+#!/bin/bash
+exec /usr/bin/python3 /home/a2gutierrezmora/.local/bin/brightness-gui.py
