@@ -43,6 +43,13 @@ class BrightnessUI(Gtk.Window):
         self.slider.connect("value-changed", self.on_change)
         box.pack_start(self.slider, False, False, 0)
 
+        self.entry = Gtk.Entry()
+        self.entry.set_width_chars(6)
+        self.entry.set_alignment(0.5)
+        self.entry.connect("activate", self.on_entry)
+        self.entry.connect("focus-out-event", self.on_entry_focus)
+        box.pack_start(self.entry, False, False, 0)
+
         self.apply = Gtk.Button(label="Apply")
         self.apply.set_sensitive(False)
         self.apply.connect("clicked", self.on_apply)
@@ -50,6 +57,7 @@ class BrightnessUI(Gtk.Window):
 
         self.slider.set_value(self.current_pct())
         self.refresh_label()
+        self.entry.set_text(f"{self.current_pct():.2f}")
 
     def current_pct(self):
         try:
@@ -63,6 +71,24 @@ class BrightnessUI(Gtk.Window):
     def on_change(self, w):
         self.refresh_label()
         self.apply.set_sensitive(True)
+        self.entry.set_text(f"{self.slider.get_value():.2f}")
+
+    def on_entry(self, w):
+        self.apply_from_entry()
+
+    def on_entry_focus(self, w, event):
+        self.apply_from_entry()
+        return False
+
+    def apply_from_entry(self):
+        try:
+            val = float(self.entry.get_text().replace(",", "."))
+            if val < 0.25 or val > 100:
+                raise ValueError
+            self.slider.set_value(val)
+            self.apply.set_sensitive(True)
+        except ValueError:
+            self.entry.set_text(f"{self.slider.get_value():.2f}")
 
     def on_apply(self, w):
         set_brightness(self.slider.get_value())
