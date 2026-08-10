@@ -35,7 +35,7 @@ class BrightnessUI(Gtk.Window):
         box.pack_start(self.label, False, False, 0)
 
         self.slider = Gtk.Scale.new(Gtk.Orientation.HORIZONTAL, None)
-        self.slider.set_range(10, 100)
+        self.slider.set_range(0.25, 100)
         self.slider.set_increments(0.25, 1)
         self.slider.set_digits(2)
         self.slider.set_value_pos(Gtk.PositionType.TOP)
